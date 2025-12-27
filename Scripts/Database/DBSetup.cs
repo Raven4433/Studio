@@ -16,7 +16,7 @@ public class DBSetup : MonoBehaviour {
 
 
     void Start(){
-        Core.dbSetup.CreateProject("Creations of Power");
+        // Core.dbSetup.CreateProject("Creations of Power");
         // **Verify:** Go to your `E:/VAULT` folder in Windows Explorer. You should see the folder "Creations of Power" with `project.db` and the `MEDIA` subfolders inside.
     }
 
@@ -41,9 +41,13 @@ public class DBSetup : MonoBehaviour {
     public void InitializeSystemDB(){
         if(Core.DBM.ContainsKey("system")){ return; }
 
+        string path = Path.Combine(Core.VaultRoot, "system.db");
+        if(!File.Exists(path)){ File.Create(path).Close(); }
+
         SimpleSQLManager dbm = CreateManager("DB_System", Core.VaultRoot, "system.db");
         
         // Create Schema if new
+        dbm.CreateTable<Settings>();
         dbm.CreateTable<Tags>();
         dbm.CreateTable<TagLinks>();
 
@@ -61,6 +65,9 @@ public class DBSetup : MonoBehaviour {
         
         Directory.CreateDirectory(projectPath);
         CreateMediaFolders(projectPath);
+
+        string path = Path.Combine(projectPath, "project.db");
+        if(!File.Exists(path)){ File.Create(path).Close(); }
 
         // 2. Create & Init DB
         SimpleSQLManager projDB = CreateManager($"DB_{projectName}", projectPath, "project.db");
@@ -90,6 +97,8 @@ public class DBSetup : MonoBehaviour {
 
         SimpleSQLManager projDB = CreateManager($"DB_{projectName}", projectPath, "project.db");
         Core.DBM.Add(projectName, projDB);
+
+        SetLastProject(projectName);
         
         Debug.Log($"[DBSetup] Project '{projectName}' Loaded.");
     }
@@ -159,8 +168,9 @@ public class DBSetup : MonoBehaviour {
         dbm.changeWorkingName = true;
         dbm.workingName = fileName;
 
-        
+
         dbm.Initialize(true); // 'true' usually forces persistence in SimpleSQL
+        dbm.enabled = true;
         return dbm;
     }
 
