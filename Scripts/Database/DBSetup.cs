@@ -29,9 +29,12 @@ public class DBSetup : MonoBehaviour {
         
         // 2. Load System DB
         InitializeSystemDB();
-        LoadAllProjects();
 
-        // LoadLastProject();
+        // 1. Scan for all projects
+        LoadAllProjects();
+        
+        // 2. Auto-open the last one
+        //LoadLastProject();
     }
 
     // --- SYSTEM DB ---
@@ -112,6 +115,35 @@ public class DBSetup : MonoBehaviour {
             }
         }
     }
+
+    // --- LAST PROJECT LOGIC ---
+
+    public void LoadLastProject(){
+        var settingsList = Core.DBM["system"].Query<Settings>("SELECT * FROM Settings WHERE ID = 1");
+        
+        if(settingsList != null && settingsList.Count > 0){
+            string lastProj = settingsList[0].LastProject;
+            if(!string.IsNullOrEmpty(lastProj)){
+                Debug.Log($"[DBSetup] Loading Last Project: {lastProj}");
+                LoadProject(lastProj);
+            }
+        }
+    }
+
+    private void SetLastProject(string projectName){
+        var settingsList = Core.DBM["system"].Query<Settings>("SELECT * FROM Settings WHERE ID = 1");
+        Settings settings;
+        
+        if(settingsList != null && settingsList.Count > 0){
+            settings = settingsList[0];
+        } else {
+            settings = new Settings{ ID = 1 };
+        }
+        
+        settings.LastProject = projectName;
+        Core.DBM["system"].Insert(settings);
+    }
+
     // ----------------- HELPERS -----------------
 
     private SimpleSQLManager CreateManager(string goName, string basePath, string fileName){
