@@ -22,7 +22,7 @@ public class DBSetup : MonoBehaviour {
 
     
     public void init(){  
-        Library = GameObject.Find("LIBRARY");
+        Library = GameObject.Find("Library");
   
         // 1. Ensure Vault Root Exists
         if(!Directory.Exists(Core.VaultRoot)){ Directory.CreateDirectory(Core.VaultRoot); }
@@ -81,7 +81,7 @@ public class DBSetup : MonoBehaviour {
 
 
 
-        // 5. Load it into Core
+        // 4. Load it into Core
         if(Core.DBM.ContainsKey(projectName)){ Core.DBM.Remove(projectName); }
         Core.DBM.Add(projectName, projDB);
         
@@ -97,8 +97,13 @@ public class DBSetup : MonoBehaviour {
 
         SimpleSQLManager projDB = CreateManager($"DB_{projectName}", projectPath, "project.db");
         Core.DBM.Add(projectName, projDB);
+        Core.AP = projectName;
 
         SetLastProject(projectName);
+
+
+        Core.Data.init(projDB);
+
         
         Debug.Log($"[DBSetup] Project '{projectName}' Loaded.");
     }
