@@ -13,9 +13,9 @@ public class Core : MonoBehaviour {
 
 
 
-
+    public static DataStore Data { get; private set; }
     public static DBSetup dbSetup { get; private set; }
-
+    
 
 
 
@@ -30,9 +30,11 @@ public class Core : MonoBehaviour {
     void Awake(){
         Instance = this;
 
-
+        Data = new DataStore();
         dbSetup = gameObject.AddComponent<DBSetup>();  dbSetup.init();
 
+     
+        
     }
 
 
