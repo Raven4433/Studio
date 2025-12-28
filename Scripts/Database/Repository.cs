@@ -44,15 +44,19 @@ public class Repository<T> where T : class, new() {
     }
 
     public void Save(T item){
-        _db.UpdateTable(item);
-
-        if(_idProp != null){
-            int id = (int)_idProp.GetValue(item);
-            _cache[id] = item;
-        }
+        if(_idProp == null){ return; }
         
-        // In a complex app, we'd check if ID existed before to fire Added vs Updated
-        OnUpdated?.Invoke(item);
+        int id = (int)_idProp.GetValue(item);
+        bool isNew = (id == 0);
+        
+        _db.UpdateTable(item);
+        
+        // Re-fetch ID after insert (SQLite auto-increments it)
+        id = (int)_idProp.GetValue(item);
+        _cache[id] = item;
+        
+        if(isNew){ OnAdded?.Invoke(item); }
+        else{ OnUpdated?.Invoke(item); }
     }
 
     public void Delete(T item){
