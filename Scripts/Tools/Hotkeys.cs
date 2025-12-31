@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using TMPro; // To check for input field focus
 
-namespace Studio.Tools {
+namespace Studio {
 
 [System.Flags]
 public enum Modifier { None = 0, Ctrl = 1, Shift = 2, Alt = 4 }
