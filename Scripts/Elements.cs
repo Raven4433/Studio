@@ -1,16 +1,35 @@
 using UnityEngine;
+using Studio.UI;
+using TMPro;
 
-public class Elements : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+
+namespace Studio {
+
+public class Elements : MonoBehaviour {
+
+
+
+
+    // -------- SETTINGS -------- 
+    [Space(5)][Header("--- SETTINGS ---")]
+    public GameObject SettingsGO;
+    public ThemeProfile DefaultTheme;
+    public TMP_InputField CreateProjectInput;
+    public TMP_Dropdown ProjectsDropdown;
+
+
+
+
+
+
+
+
+    void Start(){
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
+
+
+}
 }
