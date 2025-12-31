@@ -131,6 +131,14 @@ Input Management: A context-aware Hotkeys system that blocks shortcuts while the
 
 
 
+
+------------------------------------------ NOTES -------------------------------------------------
+Never add UI Elements events with code, the user will link those manually inside the Unity Editor, just list which UI Element to link where in a text file, but only when applicable and needed.
+
+
+
+
+
 ----------------------------------- CODE FORMATING RULES ------------------------------------------
 You are strictly required to write code in a specific "Compact Studio Style."
 
