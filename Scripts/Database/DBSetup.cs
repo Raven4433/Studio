@@ -30,10 +30,13 @@ public class DBSetup : MonoBehaviour {
         // 2. Load System DB
         InitializeSystemDB();
 
-        // 1. Scan for all projects
+        // 3. Scan for all projects
         LoadAllProjects();
         
-        // 2. Auto-open the last one
+        // 4. Update Projects Dropdown
+        RefreshProjectsDropdown();
+
+        // 5. Auto-open the last one
         //LoadLastProject();
     }
 
@@ -85,6 +88,9 @@ public class DBSetup : MonoBehaviour {
         if(Core.DBM.ContainsKey(projectName)){ Core.DBM.Remove(projectName); }
         Core.DBM.Add(projectName, projDB);
         
+        // 5. Update Projects Dropdown
+        RefreshProjectsDropdown();
+
         Debug.Log($"[DBSetup] Project '{projectName}' Created & Loaded.");
     }
 
@@ -104,6 +110,7 @@ public class DBSetup : MonoBehaviour {
 
         Core.Data.init(projDB);
 
+        RefreshProjectsDropdown();
         
         Debug.Log($"[DBSetup] Project '{projectName}' Loaded.");
     }
@@ -184,6 +191,13 @@ public class DBSetup : MonoBehaviour {
         Directory.CreateDirectory(Path.Combine(media, "AUDIO"));
         Directory.CreateDirectory(Path.Combine(media, "VIDEO"));
         Directory.CreateDirectory(Path.Combine(media, "IMAGE"));
+    }
+
+    public void RefreshProjectsDropdown(){
+        List<string> projects = new List<string>();
+        foreach(string key in Core.DBM.Keys){ if(key != "system"){ projects.Add(key); } }
+        Core.ELEM.ProjectsDropdown.ClearOptions();
+        Core.ELEM.ProjectsDropdown.AddOptions(projects);
     }
 
 
