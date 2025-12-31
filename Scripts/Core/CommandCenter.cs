@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Studio.Data;
 
+
 namespace Studio { 
 
 public class CommandCenter : MonoBehaviour {
 
     private Dictionary<string, Action<string[]>> _registry = new Dictionary<string, Action<string[]>>();
 
-    public void Init(){
+    public void init(){
         Debug.Log("[CommandCenter] Initializing...");
         
         Register("CreateProject", Cmd_CreateProject, "Usage: CreateProject: Project Name");
@@ -66,6 +67,7 @@ public class CommandCenter : MonoBehaviour {
     // --- HANDLERS ---
 
     private void Cmd_CreateProject(string[] args){
+        Debug.Log("Creating Project... \""+Tools.ArrayToString<string>(args)+"\"");
         if(args.Length < 1 || string.IsNullOrEmpty(args[0])){ 
             Debug.LogError("Usage: CreateProject: Name"); return; 
         }
