@@ -73,6 +73,8 @@ AI Tooling: LLMs output JSON or text in this specific format to "control" the ap
 
 The UI mimics professional productivity tools (Obsidian, VS Code) rather than a game interface.
 
+We have a 3D + a 2D UI Canvas. The 3D one is an infinite Canvas with zooming in/out and drag moving around. Any UI Panel needs to be able to be added to both the 2D and 3D Canvases.
+
 Navigation (Sidebar-First):
 
 Omni-Box: Combined Search and Dropdown for filtering.
