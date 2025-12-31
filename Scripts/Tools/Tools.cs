@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Collections.Generic;
 
 
-namespace Studio.Tools {
+namespace Studio {
 
 public static class Tools {
 
@@ -19,6 +19,51 @@ public static class Tools {
         return s.Split(new string[] { separator }, StringSplitOptions.None); 
     }
 
+    //========================================================================
+    // Universal array to string - works with any type
+    public static string ArrayToString<T>(T[] arr, string separator = ", "){
+        if(arr == null || arr.Length == 0) return "";
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<arr.Length; i++){
+            string val = arr[i]?.ToString() ?? "";
+            if(arr[i] is float || arr[i] is double || arr[i] is decimal){ val = val.Replace(",", "."); }
+            sb.Append(val);
+            if(i < arr.Length - 1) sb.Append(separator);
+        }
+        return sb.ToString();
+    }
+
+    // Overload with coloring support for comparable types (numbers)
+    public static string ArrayToString<T>(T[] arr, T colorGreater, T colorLess, string separator = ", ") where T : IComparable<T> {
+        if(arr == null || arr.Length == 0) return "";
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<arr.Length; i++){
+            string val = arr[i]?.ToString() ?? "";
+            if(arr[i] is float || arr[i] is double || arr[i] is decimal){ val = val.Replace(",", "."); }
+
+            if(i == 0 && arr[i].CompareTo(colorGreater) > 0 && arr[i].CompareTo(colorLess) < 0){
+                sb.Append("<color=#66EEFF>").Append(val).Append("</color>");
+            } else {
+                sb.Append(val);
+            }
+            if(i < arr.Length - 1) sb.Append(separator);
+        }
+        return sb.ToString();
+    }
+
+    // Universal list to string - works with any type
+    public static string ListToString<T>(List<T> list, string separator = ", "){
+        if(list == null || list.Count == 0) return "";
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i<list.Count; i++){
+            string val = list[i]?.ToString() ?? "";
+            if(list[i] is float || list[i] is double || list[i] is decimal){ val = val.Replace(",", "."); }
+            sb.Append(val);
+            if(i < list.Count - 1) sb.Append(separator);
+        }
+        return sb.ToString();
+    }
+    //========================================================================
 
     public static void ParseDialogue(string input, out string character, out string remarks, out string speech){
         character = ""; remarks = ""; speech = "";
