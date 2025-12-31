@@ -15,9 +15,12 @@ public class Core : MonoBehaviour {
     public static Hotkeys hotkeys { get; private set; }
     public static DataStore Data { get; private set; }
     public static DBSetup dbSetup { get; private set; }
+
+    public static CommandCenter CMD { get; private set; }
     
     
 
+    // Core.CMD.Execute("CreateProject Matrix");
 
 
     public static Dictionary<string, SimpleSQLManager> DBM = new Dictionary<string, SimpleSQLManager>();
@@ -43,3 +46,6 @@ public class Core : MonoBehaviour {
 
 }
 }
+
+
+
