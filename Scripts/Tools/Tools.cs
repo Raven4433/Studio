@@ -14,9 +14,40 @@ public static class Tools {
 
     public static bool IsEmpty(string s){ return string.IsNullOrEmpty(s); }
 
-    public static string[] Split(string s, string separator = "|"){ 
+    public static string[] Split(string s, string separator = "|"){
         if(IsEmpty(s)) return new string[0];
-        return s.Split(new string[] { separator }, StringSplitOptions.None); 
+        return s.Split(new string[] { separator }, StringSplitOptions.None);
+    }
+
+    public static string[] ParseCommandArguments(string line){
+        if(IsEmpty(line)) return new string[0];
+
+        List<string> args = new List<string>();
+        StringBuilder currentArg = new StringBuilder();
+        bool inQuotes = false;
+
+        for(int i=0; i<line.Length; i++){
+            char c = line[i];
+            if(c == '"'){
+                inQuotes = !inQuotes;
+                continue;
+            }
+
+            if(c == ',' && !inQuotes){
+                args.Add(currentArg.ToString().Trim());
+                currentArg.Clear();
+            } else {
+                currentArg.Append(c);
+            }
+        }
+        if(currentArg.Length > 0){ args.Add(currentArg.ToString().Trim()); }
+
+        return args.ToArray();
+    }
+
+    public static bool ValidateArgs(string[] args, int minCount){
+        if(args == null || args.Length < minCount){ return false; }
+        return true;
     }
 
     //========================================================================
@@ -90,7 +121,7 @@ public static class Tools {
         }
 
         remarks = string.Join("\n", remarkLines);
-        
+
         // Remaining lines are speech
         List<string> speechLines = new List<string>();
         while(index < lines.Length){
@@ -105,13 +136,13 @@ public static class Tools {
     public static Color HexToColor(string hex){
         if(IsEmpty(hex)) return Color.white;
         hex = hex.Replace("#", "");
-        
+
         byte r = byte.Parse(hex.Substring(0,2), NumberStyles.HexNumber);
         byte g = byte.Parse(hex.Substring(2,2), NumberStyles.HexNumber);
         byte b = byte.Parse(hex.Substring(4,2), NumberStyles.HexNumber);
         byte a = 255;
         if(hex.Length == 8){ a = byte.Parse(hex.Substring(6,2), NumberStyles.HexNumber); }
-        
+
         return new Color32(r, g, b, a);
     }
 
